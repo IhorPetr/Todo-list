@@ -1,0 +1,54 @@
+﻿<h1>Список пользователей</h1>
+<input type="button" value="Добавить" class="btn btn-default" (click)="addTodo()" />
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <td>Info</td>
+        <td>IsComplete</td>
+        <td></td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let todo of Todos">
+        <ng-template [ngTemplateOutlet]="loadTemplate(todo)" 
+                     [ngOutletContext]="{ $implicit: todo}">
+        </ng-template>
+    </tr>
+    </tbody>
+</table>
+<div>{{statusMessage}}</div>
+  
+  
+<!--шаблон для чтения-->
+<ng-template #readOnlyTemplate let-todo>
+    <td>{{todo.id}}</td>
+    <td>{{todo.info}}</td>
+    <td>{{todo.isComplete}}</td>
+    <td>
+        <input type="button" value="Изменить" class="btn btn-default" (click)="editTodo(todo)" />
+    </td>
+    <td>
+        <input type="button" value="Удалить" (click)="deleteTodo(todo)" class="btn btn-danger" />
+    </td>
+</ng-template>
+ 
+<!--шаблон для редактирования-->
+<ng-template #editTemplate>
+    <td>
+        <input type="text" [(ngModel)]="editedTodo.id" readonly disabled class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedTodo.info" class="form-control" />
+    </td>
+    <td>
+        <input type="text" [(ngModel)]="editedTodo.isComplete" class="form-control" />
+    </td>
+    <td>
+        <input type="button" value="Сохранить" (click)="saveTodo()" class="btn btn-success" />
+    </td>
+    <td>
+        <input type="button" value="Отмена" (click)="cancel()" class="btn btn-warning" />
+    </td>
+</ng-template>
