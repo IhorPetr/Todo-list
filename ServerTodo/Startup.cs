@@ -55,8 +55,8 @@ namespace ServerTodo
             }
             app.UseMvc();
             app.UseCors(option=>
-                option.WithOrigins("*")
-                    .AllowAnyHeader().AllowAnyMethod());
+                option
+                    .AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
             //SampleData.Initialize(app.ApplicationServices);
         }
     }

@@ -25,6 +25,7 @@ var TodoComponent = (function () {
     TodoComponent.prototype.loadTodos = function () {
         var _this = this;
         this.serv.getTodos().subscribe(function (resp) {
+            console.log(resp.status);
             _this.Todos = resp.json();
         });
     };

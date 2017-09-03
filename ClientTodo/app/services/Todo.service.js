@@ -14,7 +14,7 @@ var http_2 = require("@angular/http");
 var TodoService = (function () {
     function TodoService(http) {
         this.http = http;
-        // private url = "http://localhost:5000/Todo";
+        //private url = "http://localhost:5000/Todo";
         this.url = 'app/services/content.json';
     }
     TodoService.prototype.getTodos = function () {

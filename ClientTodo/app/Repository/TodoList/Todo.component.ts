@@ -30,63 +30,65 @@ export class TodoComponent implements OnInit {
         this.loadTodos();
     }
      
-    //загрузка пользователей
+  
     private loadTodos() {
         this.serv.getTodos().subscribe((resp: Response) => {
+            console.log(resp.status);
             this.Todos = resp.json();  
         });
     }
-    // добавление пользователя
+    
     public addTodo() {
         debugger;
-        this.editTodo = new TodoItem(0,"",false);
+        this.editedTodo = new TodoItem(0,"Hello",false);
         this.Todos.push(this.editedTodo);
         this.isNewRecord = true;
     }
   
-    // редактирование пользователя
+   
     public editTodo(todo: TodoItem) {
-        this.editTodo = new TodoItem(todo.id, todo.info, todo.isComplete);
+        this.editedTodo = new TodoItem(todo.id, todo.info, todo.isComplete);
     }
-    // загружаем один из двух шаблонов
+    
     public loadTemplate(todo: TodoItem) {
+        debugger;
         if (this.editedTodo && this.editedTodo.id == todo.id) {
             return this.editTemplate;
         } else {
             return this.readOnlyTemplate;
         }
     }
-    // сохраняем пользователя
+   
     public saveTodo() {
         if (this.isNewRecord) {
-            // добавляем пользователя
+            
             this.serv.createTodo(this.editedTodo).subscribe((resp: Response) => {
                 this.statusMessage = 'Данные успешно добавлены',
                     this.loadTodos();
             });
             this.isNewRecord = false;
-            this.editTodo = null;
+            this.editedTodo = null;
         } else {
-            // изменяем пользователя
+            
             this.serv.updateTodo(this.editedTodo.id, this.editedTodo).subscribe((resp: Response) => {
                 this.statusMessage = 'Данные успешно обновлены',
                     this.loadTodos();
             });
-            this.editTodo = null;
+            this.editedTodo = null;
         }
     }
-    // отмена редактирования
+
     public cancel() {
-        // если отмена при добавлении, удаляем последнюю запись
+
         if (this.isNewRecord) {
             this.Todos.pop();
             this.isNewRecord = false;
         }
-        this.editTodo = null;
+        this.editedTodo = null;
     }
-    // удаление пользователя
     public deleteTodo(todo: TodoItem) {
         debugger;
+
         this.serv.deleteTodo(todo.id).subscribe((resp: Response) => {
             this.statusMessage = 'Данные успешно удалены',
                 this.loadTodos();
