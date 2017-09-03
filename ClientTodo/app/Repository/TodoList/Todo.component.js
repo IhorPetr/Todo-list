@@ -21,7 +21,6 @@ var TodoComponent = (function () {
     TodoComponent.prototype.ngOnInit = function () {
         this.loadTodos();
     };
-    //загрузка пользователей
     TodoComponent.prototype.loadTodos = function () {
         var _this = this;
         this.serv.getTodos().subscribe(function (resp) {
@@ -29,19 +28,17 @@ var TodoComponent = (function () {
             _this.Todos = resp.json();
         });
     };
-    // добавление пользователя
     TodoComponent.prototype.addTodo = function () {
         debugger;
-        this.editTodo = new TodoEntity_1.TodoItem(0, "", false);
+        this.editedTodo = new TodoEntity_1.TodoItem(0, "Hello", false);
         this.Todos.push(this.editedTodo);
         this.isNewRecord = true;
     };
-    // редактирование пользователя
     TodoComponent.prototype.editTodo = function (todo) {
-        this.editTodo = new TodoEntity_1.TodoItem(todo.id, todo.info, todo.isComplete);
+        this.editedTodo = new TodoEntity_1.TodoItem(todo.id, todo.info, todo.isComplete);
     };
-    // загружаем один из двух шаблонов
     TodoComponent.prototype.loadTemplate = function (todo) {
+        debugger;
         if (this.editedTodo && this.editedTodo.id == todo.id) {
             return this.editTemplate;
         }
@@ -49,40 +46,40 @@ var TodoComponent = (function () {
             return this.readOnlyTemplate;
         }
     };
-    // сохраняем пользователя
     TodoComponent.prototype.saveTodo = function () {
         var _this = this;
         if (this.isNewRecord) {
-            // добавляем пользователя
             this.serv.createTodo(this.editedTodo).subscribe(function (resp) {
                 _this.statusMessage = 'Данные успешно добавлены',
                     _this.loadTodos();
             });
             this.isNewRecord = false;
-            this.editTodo = null;
+            this.editedTodo = null;
         }
         else {
-            // изменяем пользователя
+            var index = this.Todos.findIndex(function (i) { return i.id === _this.editedTodo.id; });
+            this.Todos[index] = this.editedTodo;
             this.serv.updateTodo(this.editedTodo.id, this.editedTodo).subscribe(function (resp) {
                 _this.statusMessage = 'Данные успешно обновлены',
                     _this.loadTodos();
             });
-            this.editTodo = null;
+            this.editedTodo = null;
         }
     };
-    // отмена редактирования
     TodoComponent.prototype.cancel = function () {
-        // если отмена при добавлении, удаляем последнюю запись
         if (this.isNewRecord) {
             this.Todos.pop();
             this.isNewRecord = false;
         }
-        this.editTodo = null;
+        this.editedTodo = null;
     };
-    // удаление пользователя
     TodoComponent.prototype.deleteTodo = function (todo) {
         var _this = this;
         debugger;
+        var index = this.Todos.findIndex(function (i) { return i.id === todo.id; });
+        if (index !== -1) {
+            this.Todos.splice(index, 1);
+        }
         this.serv.deleteTodo(todo.id).subscribe(function (resp) {
             _this.statusMessage = 'Данные успешно удалены',
                 _this.loadTodos();

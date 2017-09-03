@@ -69,7 +69,8 @@ export class TodoComponent implements OnInit {
             this.isNewRecord = false;
             this.editedTodo = null;
         } else {
-            
+            const index = this.Todos.findIndex(i => i.id === this.editedTodo.id);
+            this.Todos[index] = this.editedTodo;
             this.serv.updateTodo(this.editedTodo.id, this.editedTodo).subscribe((resp: Response) => {
                 this.statusMessage = 'Данные успешно обновлены',
                     this.loadTodos();
@@ -88,7 +89,10 @@ export class TodoComponent implements OnInit {
     }
     public deleteTodo(todo: TodoItem) {
         debugger;
-
+        const index = this.Todos.findIndex(i => i.id === todo.id);
+        if (index !== -1) {
+            this.Todos.splice(index, 1);
+        }  
         this.serv.deleteTodo(todo.id).subscribe((resp: Response) => {
             this.statusMessage = 'Данные успешно удалены',
                 this.loadTodos();
