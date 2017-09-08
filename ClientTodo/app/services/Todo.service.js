@@ -12,10 +12,10 @@ var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 var http_2 = require("@angular/http");
 var TodoService = (function () {
+    //private url = 'app/services/content.json';
     function TodoService(http) {
         this.http = http;
-        //private url = "http://localhost:5000/Todo";
-        this.url = 'app/services/content.json';
+        this.url = "http://localhost:5000/Todo";
     }
     TodoService.prototype.getTodos = function () {
         return this.http.get(this.url);

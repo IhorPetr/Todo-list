@@ -11,6 +11,7 @@ using ServerTodo.Data.Interfaces;
 
 namespace ServerTodo.Controllers
 {
+    [EnableCors("MyPolicy")]
     public class HomeController : Controller
     {
         private IRepository<TodoEntity> r;
